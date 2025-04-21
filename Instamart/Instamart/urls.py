@@ -25,7 +25,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
     path('insta_grocery/', include('Insta_grocery.urls')),
-    path('regester/', views.regesterpage, name='regester'),
+    path('register/', views.register, name='register'),
     path('login/', views.loginpage, name='login'),
 ]
 

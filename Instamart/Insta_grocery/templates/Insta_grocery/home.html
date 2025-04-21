@@ -205,7 +205,8 @@
 
     <header>
         <div class="logo">Instamart</div>
-        <div>Welcome, User</div>
+        <div>Welcome, {{request.user}}</div>
+        <span><a href="{% url 'logout' %}">Logout</a></span>
     </header>
 
     <div class="container">
