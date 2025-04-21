@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instamart</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f3f3f3;
+        }
+
+        header {
+            background-color: #232f3e;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            color: #111;
+            margin-bottom: 20px;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .product-card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+
+        .product-image img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        .product-card h2 {
+            font-size: 18px;
+            color: #007185;
+            margin: 0 0 10px;
+        }
+
+        .product-card p {
+            margin: 5px 0;
+            color: #333;
+        }
+
+        .price {
+            color: #B12704;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .stock {
+            color: green;
+            font-size: 14px;
+        }
+
+        .card-buttons {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background-color: #007185;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #005f6b;
+        }
+
+        .btn.delete {
+            background-color: #d62828;
+        }
+
+        .btn.delete:hover {
+            background-color: #b91c1c;
+        }
+
+        /* Add Product Form */
+        .add-product-wrapper {
+            margin-top: 40px;
+        }
+
+        .toggle-form-btn {
+            background-color: #ffa41c;
+            color: black;
+            padding: 10px 16px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .toggle-form-btn:hover {
+            background-color: #f08804;
+        }
+
+        .add-form-container {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .add-form-container form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .add-form-container label {
+            font-weight: bold;
+        }
+
+        .add-form-container input[type="text"],
+        .add-form-container input[type="number"],
+        .add-form-container input[type="file"],
+        .add-form-container textarea {
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            width: 100%;
+        }
+
+        .add-form-container input[type="submit"],
+        .add-form-container button[type="submit"] {
+            background-color: #ffa41c;
+            color: black;
+            padding: 10px;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .add-form-container input[type="submit"]:hover,
+        .add-form-container button[type="submit"]:hover {
+            background-color: #f08804;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">Instamart</div>
+        <div>Welcome, User</div>
+    </header>
+
+    <div class="container">
+        <h1>Grocery</h1>
+
+        <!-- Product Grid -->
+        <div class="product-grid">
+            {% for product in groceries %}
+            <div class="product-card">
+                {% if product.image %}
+                <div class="product-image">
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                </div>
+                {% endif %}
+                <h2>{{ product.name }}</h2>
+                <p class="price">₹{{ product.price }}</p>
+                <p class="stock">{% if product.stock > 0 %}In Stock{% else %}Out of Stock{% endif %}</p>
+                <div class="card-buttons">
+                    <a href="{% url 'edit_grocery' product.id %}" class="btn">Edit</a>
+                    <a href="{% url 'delete_grocery' product.id %}" class="btn delete">Delete</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Add Product Section -->
+        <div class="add-product-wrapper">
+            <button class="toggle-form-btn" onclick="toggleAddForm()">Add Product</button>
+            <div class="add-form-container" id="addForm">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn">Add Product</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleAddForm() {
+            const form = document.getElementById('addForm');
+            form.style.display = form.style.display === 'none' || form.style.display === '' ? 'block' : 'none';
+        }
+    </script>
+
+</body>
+</html>
